@@ -5,4 +5,9 @@ export const createUserSchema = z.object({
   email: z.string().email(),
 });
 
+export const createUserOutputShema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+});
+
 export type CreateUserInput = z.TypeOf<typeof createUserSchema>;

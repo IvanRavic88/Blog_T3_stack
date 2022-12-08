@@ -1,11 +1,10 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const { data, error, isLoading } = trpc.example.hello.useQuery();
+  const { data, error, isLoading } = trpc.user["register-user"].useMutation();
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -21,9 +20,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="text-4xl text-white">
-          {JSON.stringify(data.greeting)}
-        </div>
+        <div className="text-4xl text-white">{JSON.stringify(data)}</div>
       </main>
     </>
   );
