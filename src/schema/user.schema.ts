@@ -11,3 +11,10 @@ export const createUserOutputShema = z.object({
 });
 
 export type CreateUserInput = z.TypeOf<typeof createUserSchema>;
+
+export const requestOtpSchema = z.object({
+  email: z.string().email(),
+  redirect: z.string().default("/"),
+});
+
+export type requestOtpInput = z.TypeOf<typeof requestOtpSchema>;
