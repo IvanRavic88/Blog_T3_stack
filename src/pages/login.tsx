@@ -17,11 +17,14 @@ function RegisterPage() {
   });
 
   function onSubmit(values: CreateUserInput) {
-    // mutate(values);
+    mutate(values);
   }
   return (
     <div className="m-auto flex h-screen max-w-xl items-center justify-center ">
-      <form className="bg- mb-4 flex min-w-full flex-col rounded bg-white px-8 pt-6 pb-8 shadow-md">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg- mb-4 flex min-w-full flex-col rounded bg-white px-8 pt-6 pb-8 shadow-md"
+      >
         {error && error.message}
         {success && <p>Check your email</p>}
         <h1 className="mb-5 text-2xl text-cyan-700">Login</h1>

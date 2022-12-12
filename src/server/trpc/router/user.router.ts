@@ -5,7 +5,7 @@ import {
 import { router, publicProcedure } from "../trpc";
 import * as trpc from "@trpc/server";
 import { sendLoginEmail } from "../../../utils/mailer";
-import { url } from "../../../constants";
+import { baseUrl } from "../../../constants";
 import { encode } from "../../../utils/base64";
 
 export const userRouter = router({
@@ -41,7 +41,7 @@ export const userRouter = router({
       // send email to user
       await sendLoginEmail({
         token: encode(`${token.id}:${user.email}`),
-        url: url,
+        url: baseUrl,
         email: user.email,
       });
       return true;
