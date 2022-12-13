@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 import type { CreateUserInput } from "../schema/user.schema";
 import { trpc } from "../utils/trpc";
 
+function VerifyToken() {
+  return <p>Verifyng...</p>;
+}
+
 function RegisterPage() {
   const { handleSubmit, register } = useForm<CreateUserInput>();
   const router = useRouter();
@@ -19,6 +23,13 @@ function RegisterPage() {
   function onSubmit(values: CreateUserInput) {
     mutate(values);
   }
+
+  const hash = router.asPath.split("#token")[1];
+
+  if (hash) {
+    return <VerifyToken />;
+  }
+
   return (
     <div className="m-auto flex h-screen max-w-xl items-center justify-center ">
       <form

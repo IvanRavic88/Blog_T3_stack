@@ -1,12 +1,14 @@
 import {
   createUserSchema,
   requestOtpSchema,
+  verifyOtpShema,
 } from "../../../schema/user.schema";
 import { router, publicProcedure } from "../trpc";
 import * as trpc from "@trpc/server";
 import { sendLoginEmail } from "../../../utils/mailer";
 import { baseUrl } from "../../../constants";
-import { encode } from "../../../utils/base64";
+import { decode, encode } from "../../../utils/base64";
+import { singJwt } from "../../../utils/jwt";
 
 export const userRouter = router({
   "register-user": publicProcedure
@@ -46,4 +48,25 @@ export const userRouter = router({
       });
       return true;
     }),
-});
+  "verify-otp": publicProcedure.input(verifyOtpShema).query(async ({input, ctx})=>{
+    const decoded = decode(input.hash).split(":")
+    const[id, email]=decoded
+
+    const token = await ctx.prisma.loginToken.findFirst({
+      where:{
+        id,
+        user:{email}
+      }, include:{
+      user:true
+    }}),
+    if(!token){
+      throw new trpc.TRPCError({
+        code: "FORBIDDEN",
+        message: "Invalid token"
+      })
+    }
+   const jwt = singJwt({email:token.user.email, id: token.user.id
+  })
+  ctx.
+  },})
+
