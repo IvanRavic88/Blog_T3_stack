@@ -1,7 +1,18 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
+  const { data, error, isLoading } = trpc.user.me.useQuery();
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <div>{JSON.stringify(error)}</div>;
+  }
+
   return (
     <>
       <Head>
@@ -11,9 +22,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="text-4xl text-orange-300">
-          Home page for Blog T3 Stack
-        </div>
+        <div className="text-4xl text-orange-300">{JSON.stringify(data)}</div>
       </main>
     </>
   );
