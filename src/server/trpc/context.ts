@@ -1,7 +1,7 @@
 import { type inferAsyncReturnType } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { NextApiRequest, NextApiResponse } from "next";
-import { verify, verifyJwt } from "../../utils/jwt";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { verifyJwt } from "../../utils/jwt";
 
 import { prisma } from "../db/client";
 

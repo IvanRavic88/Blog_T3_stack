@@ -18,8 +18,8 @@ function VerifyToken({ hash }: { hash: string }) {
 
 function LoginForm() {
   const { handleSubmit, register } = useForm<CreateUserInput>();
-  const router = useRouter();
   const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   const { mutate, error } = trpc.user["request-otp"].useMutation({
     onSuccess: () => {
@@ -28,10 +28,10 @@ function LoginForm() {
   });
 
   function onSubmit(values: CreateUserInput) {
-    mutate({...values, redirect: router.asPath});
+    mutate({ ...values, redirect: router.asPath });
   }
 
-  const hash = router.asPath.split("#token")[1];
+  const hash = router.asPath.split("#token=")[1];
 
   if (hash) {
     return <VerifyToken hash={hash} />;

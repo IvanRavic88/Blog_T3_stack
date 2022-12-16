@@ -10,12 +10,28 @@ import { baseUrl } from "../../../constants";
 import { decode, encode } from "../../../utils/base64";
 import { singJwt } from "../../../utils/jwt";
 import { serialize } from "cookie";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 
 export const userRouter = router({
   "register-user": publicProcedure
     .input(createUserSchema)
     .mutation(async ({ ctx, input }) => {
-      return console.log(ctx, input);
+      const { email, name } = input;
+      try {
+        const user = await ctx.prisma.user.create({
+          data: { email, name },
+        });
+        return user;
+      } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError) {
+          if (error.code === "P2002") {
+            throw new trpc.TRPCError({
+              code: "CONFLICT",
+              message: "User already exist",
+            });
+          }
+        }
+      }
     }),
   "request-otp": publicProcedure
     .input(requestOtpSchema)
@@ -53,6 +69,7 @@ export const userRouter = router({
     .input(verifyOtpShema)
     .query(async ({ input, ctx }) => {
       const decoded = decode(input.hash).split(":");
+      console.log(decoded);
       const [id, email] = decoded;
 
       const token = await ctx.prisma.loginToken.findFirst({
