@@ -1,16 +1,14 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { trpc } from "../utils/trpc";
+import Link from "next/link";
+import LoginForm from "../components/LoginForm";
+import { useUserContext } from "../context/user.context";
 
 const Home: NextPage = () => {
-  const { data, error, isLoading } = trpc.user.me.useQuery();
+  const user = useUserContext();
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <div>{JSON.stringify(error)}</div>;
+  if (!user) {
+    return <LoginForm />;
   }
 
   return (
@@ -22,7 +20,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-center">
-        <p className="text-4xl text-orange-300">{JSON.stringify(data)}</p>
+        <Link href="/posts/new" className="text-white">
+          Create post
+        </Link>
       </main>
     </>
   );
